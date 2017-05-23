@@ -223,12 +223,13 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return playerDeck[row].description
+        return (row < playerDeck.count ? playerDeck[row].description : nil)
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)  {
-        selectedCard = playerDeck[row]
-        //have var = pickerData[row]
+        if row < playerDeck.count {
+            self.selectedCard = playerDeck[row]
+        }
     }
     
     
@@ -241,6 +242,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     func start()    {
+        playerDeck.removeAll()
+        cpuDeck.removeAll()
+        deck.removeAll()
+        cpuPairsArray.removeAll()
+        playerPairsArray.removeAll()
         createDeck()
         shuffle()
         shuffle()
@@ -248,27 +254,60 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         organizeCardDeck()
         checkForPlayerPairs()
         checkForCPUPairs()
+        pickerView.reloadAllComponents()
         GameCardsLeft.text = "\(drawDeck.count)"
         CPUCardsLeft.text = "\(cpuDeck.count)"
         CPUPairs.text = "\(cpuPairsArray.count)"
         UserPairs.text = "\(playerPairsArray.count)"
+    }
+    
+    func checkGameOver()    {
+        if(cpuDeck.count == 0 && playerDeck.count == 0 && drawDeck.count == 0)  {
+            let cpuPairCount = cpuPairsArray.count
+            let playerPairCount = playerPairsArray.count
+            if(playerPairCount > cpuPairCount)  {
+                let alertController = UIAlertController(title: "Game Over", message: "You Win!", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Restart", style: UIAlertActionStyle.default,handler: nil))
+                self.present(alertController, animated: true, completion: start)
+            }   else if(playerPairCount < cpuPairCount) {
+                let alertController = UIAlertController(title: "Game Over", message: "You Lose!", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Restart", style: UIAlertActionStyle.default,handler: nil))
+                self.present(alertController, animated: true, completion: start)
+            }   else if(playerPairCount == cpuPairCount)    {
+                let alertController = UIAlertController(title: "Game Over", message: "Tie Game!", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Restart", style: UIAlertActionStyle.default,handler: nil))
+                self.present(alertController, animated: true, completion: start)
+            }
+        }
+    }
+    
+    func startAlert()   {
+        let startAlert = UIAlertController(title: "Go Fish Go", message: "Match pairs of two, match the most to win", preferredStyle: UIAlertControllerStyle.alert)
+        startAlert.addAction(UIAlertAction(title: "Start", style: UIAlertActionStyle.default,handler: nil))
+        self.present(startAlert, animated: true, completion: start)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.pickerView.delegate = self
         self.pickerView.dataSource = self
-
-        start()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        startAlert()
     }
     
     @IBAction func SelectCard(_ sender: UIButton) {
         checkCPUHand(selectedCard: selectedCard)
+        pickerView.reloadAllComponents()
         checkForPlayerPairs()
         pickerView.reloadAllComponents()
-        if(playerDeck.count == 0 && drawDeck.count > 0)   {
+        if(playerDeck.count == 0)   {
             playerDraw()
         }
+        pickerView.reloadAllComponents()
         
         GameCardsLeft.text = "\(drawDeck.count)"
         CPUCardsLeft.text = "\(cpuDeck.count)"
@@ -276,16 +315,25 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         UserPairs.text = "\(playerPairsArray.count)"
         
         randomIndex = Int(arc4random_uniform(UInt32(cpuDeck.count)))
-        checkPlayerHand(selectedCard: cpuDeck[randomIndex])
+        pickerView.reloadAllComponents()
+        if(cpuDeck.count == 1)  {
+            checkPlayerHand(selectedCard: cpuDeck[0])
+        }   else    {
+            checkPlayerHand(selectedCard: cpuDeck[randomIndex])
+        }
+        pickerView.reloadAllComponents()
         checkForCPUPairs()
-        if(cpuDeck.count == 0 && drawDeck.count > 0)   {
+        pickerView.reloadAllComponents()
+        if(cpuDeck.count == 0)   {
             cpuDraw()
         }
+        pickerView.reloadAllComponents()
         
         GameCardsLeft.text = "\(drawDeck.count)"
         CPUCardsLeft.text = "\(cpuDeck.count)"
         CPUPairs.text = "\(cpuPairsArray.count)"
         UserPairs.text = "\(playerPairsArray.count)"
+        checkGameOver()
     }
 }
 
