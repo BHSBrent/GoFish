@@ -301,6 +301,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     @IBAction func SelectCard(_ sender: UIButton) {
         checkCPUHand(selectedCard: selectedCard)
+        organizeCardDeck()
         pickerView.reloadAllComponents()
         checkForPlayerPairs()
         pickerView.reloadAllComponents()
@@ -349,6 +350,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         }   else    {
             checkPlayerHand(selectedCard: cpuDeck[0])
         }
+        organizeCardDeck()
         pickerView.reloadAllComponents()
         checkForCPUPairs()
         pickerView.reloadAllComponents()
