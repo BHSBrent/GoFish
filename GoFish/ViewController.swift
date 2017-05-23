@@ -314,12 +314,40 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         CPUPairs.text = "\(cpuPairsArray.count)"
         UserPairs.text = "\(playerPairsArray.count)"
         
-        randomIndex = Int(arc4random_uniform(UInt32(cpuDeck.count)))
+        //randomIndex = Int(arc4random_uniform(UInt32(cpuDeck.count)))
         pickerView.reloadAllComponents()
         if(cpuDeck.count == 1)  {
             checkPlayerHand(selectedCard: cpuDeck[0])
+        }   else if(cpuDeck.count == 2)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(2))])
+        }   else if(cpuDeck.count == 3)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(3))])
+        }   else if(cpuDeck.count == 4)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(4))])
+        }   else if(cpuDeck.count == 5)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(5))])
+        }   else if(cpuDeck.count == 6)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(6))])
+        }   else if(cpuDeck.count == 7)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(7))])
+        }   else if(cpuDeck.count == 8)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(8))])
+        }   else if(cpuDeck.count == 9)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(9))])
+        }   else if(cpuDeck.count == 10)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(10))])
+        }   else if(cpuDeck.count == 11)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(11))])
+        }   else if(cpuDeck.count == 12)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(12))])
+        }   else if(cpuDeck.count == 13)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(13))])
+        }   else if(cpuDeck.count == 14)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(14))])
+        }   else if(cpuDeck.count == 15)    {
+            checkPlayerHand(selectedCard: cpuDeck[Int(arc4random_uniform(15))])
         }   else    {
-            checkPlayerHand(selectedCard: cpuDeck[randomIndex])
+            checkPlayerHand(selectedCard: cpuDeck[0])
         }
         pickerView.reloadAllComponents()
         checkForCPUPairs()
